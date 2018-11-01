@@ -9,23 +9,31 @@ class UserManager(BaseUserManager):
     use_in_migrations = True
 
     def _create_user(self, userName, email, rawPw, **extra_fields):
+        userName = self.normalize_username(userName)
         email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
-        user.set_password(password)
+        user = self.model(userName=userName, **extra_fields)
+        hashedPw = user.make_password(rawPw, None, PBKDF2PasswordHasher)
+        user.set_password(hashedPw)
         user.save(using=self._db)
         return user
 
+    def create_superuser(self, userName, email, rawPw, **extra_fields):
+        extra_fields.setdefault('is_superuser', True)
+
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+
+        return self._create_user(userName, email, rawPw, **extra_fields)
+
 
 class User(AbstractBaseUser):
-    userId = models.IntegerField(primary_key=True)
+    userId = models.AutoField(primary_key=True)
     userName = models.CharField('user name', max_length=20, unique=True)
     email = models.EmailField('email address', max_length=20)
-    hashedPw = models.CharField('hashed password', max_length=500)
+    password = models.CharField('hashed password', max_length=500)
     salt = models.CharField('salt', max_length=100)
 
     objects = UserManager()
 
     USERNAME_FIELD = 'userName'
     REQUIRED_FIELDS = []
-
-
