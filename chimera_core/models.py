@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.hashers import PBKDF2PasswordHasher
+from django.contrib.auth.models import PermissionsMixin
 
 # Create your models here.
 
@@ -18,18 +19,19 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, userName, email, password=None):
-        user = self.create_user(
+        superUser = self.create_user(
             userName,
             email,
             password=password,
         )
-        user.is_admin = True
-        user.is_staff = True
-        user.save(using=self._db)
-        return user
+        superUser.is_admin = True
+        superUser.is_staff = True
+        superUser.is_superuser = True
+        superUser.save(using=self._db)
+        return superUser
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser,PermissionsMixin):
     userId = models.AutoField(primary_key=True)
     userName = models.CharField(
         verbose_name='user name', max_length=20, unique=True)
@@ -45,11 +47,3 @@ class User(AbstractBaseUser):
     def __str__(self):
         return self.userName
 
-
-class UserProfileInfo(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    portfolio_site = models.URLField(blank=True)
-    profile_pic = models.ImageField(upload_to='profile_pics', blank=True)
-
-    def __str__(self):
-        return self.user

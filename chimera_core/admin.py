@@ -3,7 +3,6 @@ from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
-from chimera_core.models import User, UserProfileInfo
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -68,5 +67,4 @@ class UserAdmin(BaseUserAdmin):
 
 
 admin.site.register(User, UserAdmin)
-admin.site.register(UserProfileInfo)
 admin.site.unregister(Group)
