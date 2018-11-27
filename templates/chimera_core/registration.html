@@ -3,16 +3,20 @@
 {% block body_block %}
   <div class="container">
     <div class="jumbotron">
-      {% if user.is_authenticated %}
+      {% if registered %}
         <h1>Thank you for registering!</h1>
+      
+      {% elif user.is_authenticated %}
+        <h1>You have already registered</h1>
+        
       {% else %}
         <h1>Register Here</h1>
-        <h3>Please fill out the form.</h3>
+        <h3>Just fill out the form.</h3>
         <form enctype="multipart/form-data" method="POST">
           {% csrf_token %}
           {{ user_form.as_p }}
           <input type="submit" name="" value="Register">
-        </form>
+        </form>       
       {% endif %}
     </div>
   </div>
