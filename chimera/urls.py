@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^special/',views.special,name='special'),
     url(r'^chimera_core/',include('chimera_core.urls')),
     url(r'^logout/$', views.user_logout, name='logout'),
+    url(r'^captcha/', include('captcha.urls')),
 ]
