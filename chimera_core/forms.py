@@ -1,13 +1,19 @@
 from django import forms
-# from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from captcha.fields import CaptchaField
 
 User = get_user_model()
 
-class UserForm(forms.ModelForm):
+class UserRegForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
-    captcha = CaptchaField()
-    class Meta():
+
+    class Meta:
         model = User
-        fields = ('userName','email', 'password')
+        fields = ('userName', 'email', 'password')
+
+# class UserLoginForm(forms.ModelForm):
+#     captcha = CaptchaField()
+
+#     class Meta:
+#         model = User
+#         fields = ('userName', 'password')

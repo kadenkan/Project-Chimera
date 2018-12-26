@@ -22,7 +22,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^$',views.index,name='index'),
     url(r'^special/',views.special,name='special'),
+    url(r'^captcha//', include('captcha.urls')),
     url(r'^chimera_core/',include('chimera_core.urls')),
+    url(r'^login/$', views.user_login, name='login'),
     url(r'^logout/$', views.user_logout, name='logout'),
-    url(r'^captcha/', include('captcha.urls')),
 ]
