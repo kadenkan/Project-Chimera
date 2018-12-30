@@ -143,3 +143,4 @@ MEDIA_ROOT = MEDIA_DIR
 LOGIN_URL = '/chimera_core/user_login/'
 
 AUTH_USER_MODEL = 'chimera_core.User'
+

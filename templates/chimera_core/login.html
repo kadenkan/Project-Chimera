@@ -5,10 +5,16 @@
     <h1>Login here :</h1>
     <form method="post" action="{% url 'chimera_core:user_login' %}">
       {% csrf_token %}
-      <label for="username">Username:</label>
-      <input type="text" name="username" placeholder="Username">
-      <label for="password">Password:</label>
-      <input type="password" name="password" placeholder="Password">
+      <table>
+        <tr>
+          <th><h4 for="username">Username:</h4></th>
+          <td><input type="text" name="username"></td>
+        </tr>
+        <tr>
+          <th><h4 for="password">Password:</h4></th>
+          <td><input type="password" name="password"></td>
+        </tr>
+      </table>
       <input type="submit" name="" value="Login">
     </form>
   </div>

@@ -5,7 +5,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
-
 def index(request):
     return render(request, 'chimera_core/index.html')
 
@@ -36,7 +35,7 @@ def register(request):
         regform = UserRegForm()
     return render(request, 'chimera_core/registration.html',
                   {'form': regform,
-                           'registered': registered})
+                    'registered': registered})
 
 
 def user_login(request):
