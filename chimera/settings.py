@@ -144,3 +144,4 @@ LOGIN_URL = '/chimera_core/user_login/'
 
 AUTH_USER_MODEL = 'chimera_core.User'
 
+SITE_IMAGES_DIR_PATH = '/chimera_core/static/chimera_core/captcha_images'
