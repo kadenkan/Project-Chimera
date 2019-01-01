@@ -144,4 +144,4 @@ LOGIN_URL = '/chimera_core/user_login/'
 
 AUTH_USER_MODEL = 'chimera_core.User'
 
-SITE_IMAGES_DIR_PATH = '/chimera_core/static/chimera_core/captcha_images'
+CAPT_IMAGES_DIR_URL = 'C:/Users/KaHo/Project Chimera/Project-Chimera/statics/chimera_core/captcha_images/'

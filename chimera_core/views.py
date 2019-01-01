@@ -41,21 +41,36 @@ def register(request):
 
 
 def user_login(request):
+    chimera = Chimera()
+    capt_text = chimera.create_random_captcha_text(4)
+    captname = chimera.create_image_captcha(request, 1, capt_text)
+    hashed_text = chimera.create_hash(capt_text)
+
     if request.method == 'POST':
-        image = Chimera.create_image_captcha(request,1,)
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(username=username, password=password)
-        if user:
-            if user.is_active:
-                login(request, user)
-                return HttpResponseRedirect(reverse('index'))
+        data = request.POST.copy()
+
+        if hashed_text == chimera.create_hash(data['imgtext']):
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            user = authenticate(username=username, password=password)
+
+            if user:
+
+                if user.is_active:
+                    login(request, user)
+                    return HttpResponseRedirect(reverse('index'))
+
+                else:
+                    return HttpResponse("Your account was inactive.")
+
             else:
-                return HttpResponse("Your account was inactive.")
+                print("Someone tried to login and failed.")
+                print("They used username: {} and password: {}".format(
+                    username, password))
+                return HttpResponse("Invalid login details given")
+        
         else:
-            print("Someone tried to login and failed.")
-            print("They used username: {} and password: {}".format(
-                username, password))
-            return HttpResponse("Invalid login details given")
+            return render_to_response('form.html', {'tempname':  captname},)
+
     else:
-        return render(request, 'chimera_core/login.html', {})
+        return render(request, 'chimera_core/login.html', {'tempname':  captname},)

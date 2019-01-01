@@ -12,22 +12,20 @@ ALPHABET_LOWERCASE = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
 ALPHABET_UPPERCASE = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
                       'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
-PUNCTUATION = ['!', '@', '#', '$', '%', '^', '&',
-               '*', '(', ')', '-', '_', '+', '=', ',', '.', ':']
+# PUNCTUATION = ['!', '@', '#', '$', '%', '^', '&',
+#                '*', '(', ')', '-', '_', '+', '=', ',', '.', ':']
 
 class Chimera:
-
-    chimera_code = {}
 
     # This function will create a random captcha string text based on above three list.
     # The input parameter is the captcha text length.
 
-    def create_random_captcha_text(self):
+    def create_random_captcha_text(self, text_length):
 
-        base_char = ALPHABET_LOWERCASE + ALPHABET_UPPERCASE + NUMBER_LIST + PUNCTUATION
+        base_char = ALPHABET_LOWERCASE + ALPHABET_UPPERCASE + NUMBER_LIST
 
         # create a 5 char random strin and sha hash it, note that there is no big i
-        imgtext = ''.join([random.choice(base_char) for i in range(random.randint(2, 4))])
+        imgtext = ''.join([random.choice(base_char) for i in range(text_length)])
         # create hash
 
         return imgtext
@@ -36,7 +34,7 @@ class Chimera:
 
         salt = settings.SECRET_KEY[:20]
         # create hash
-        imghash = sha256(salt+captcha_text).hexdigest()
+        imghash = sha256((salt+captcha_text).encode('utf-8')).hexdigest()
 
         return imghash
 
@@ -54,15 +52,30 @@ class Chimera:
         image_captcha.create_noise_dots(image, image.getcolors())
 
         # Save the image to a png file.
-        temp = settings.SITE_IMAGES_DIR_PATH + request.META['REMOTE_ADDR'] + num + '.png'
+        temp = settings.CAPT_IMAGES_DIR_URL + request.META['REMOTE_ADDR']+ "_" + str(num) + '.png'
+        print(temp)
         image.save(temp, "PNG")
-        tempname = request.META['REMOTE_ADDR'] + num + '.png'
+        tempname = request.META['REMOTE_ADDR'] + "_" + str(num) + '.png'
 
-        return image, tempname
+        return tempname
 
+    def generate_chimera_codes(self, request):
 
-    def assign_order(self):
+        chimera_code = {}
 
         order = random.sample(range(8),3)
 
-        return order
+        for i in range(3):
+
+            text_length = range(random.randint(2, 4))
+        
+            text = self.create_random_captcha_text(text_length)
+
+            imgname = self.create_image_captcha(request, i, text)
+
+            chimera_code[(order[i],text_length)] = self.create_hash(text)
+
+        return (chimera_code, imgname)
+
+
+
