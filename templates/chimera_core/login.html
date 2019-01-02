@@ -1,4 +1,5 @@
 {% extends 'chimera_core/base.html' %}
+{% load staticfiles%}
 {% block body_block %}
 <div class="container">
   <div class="jumbotron">
@@ -7,19 +8,25 @@
       {% csrf_token %}
       <table>
         <tr>
-          <th><h4 for="username">Username:</h4></th>
+          <th>
+            <h4 for="username">Username:</h4>
+          </th>
           <td><input type="text" name="username"></td>
         </tr>
         <tr>
           <th>
-            <img src="../../statics/chimera_core/captcha_images/{{ tempname }}"><br />
+            {% with 'chimera_core/captcha_images/'|add:request.tempname|add:'.png' as capt_static %}
+              <img src="{% static capt_static %}" /><br />
+            {% endwith %}
           </th>
           <td>
-            <input type="text" size="20" name="imgtext"><br/>
+            <input type="text" size="20" name="imgtext"><br />
           </td>
         </tr>
         <tr>
-          <th><h4 for="password">Password:</h4></th>
+          <th>
+            <h4 for="password">Password:</h4>
+          </th>
           <td><input type="password" name="password"></td>
         </tr>
       </table>

@@ -53,7 +53,6 @@ class Chimera:
 
         # Save the image to a png file.
         temp = settings.CAPT_IMAGES_DIR_URL + request.META['REMOTE_ADDR']+ "_" + str(num) + '.png'
-        print(temp)
         image.save(temp, "PNG")
         tempname = request.META['REMOTE_ADDR'] + "_" + str(num) + '.png'
 

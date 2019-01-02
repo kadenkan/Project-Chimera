@@ -45,6 +45,7 @@ def user_login(request):
     capt_text = chimera.create_random_captcha_text(4)
     captname = chimera.create_image_captcha(request, 1, capt_text)
     hashed_text = chimera.create_hash(capt_text)
+    print(captname)
 
     if request.method == 'POST':
         data = request.POST.copy()
@@ -70,7 +71,7 @@ def user_login(request):
                 return HttpResponse("Invalid login details given")
         
         else:
-            return render_to_response('form.html', {'tempname':  captname},)
+            return render(request,'form.html', {'tempname':  captname})
 
     else:
-        return render(request, 'chimera_core/login.html', {'tempname':  captname},)
+        return render(request, 'chimera_core/login.html', {'tempname':  captname})
