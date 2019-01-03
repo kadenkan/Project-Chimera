@@ -62,16 +62,16 @@ def user_login(request):
                     return HttpResponseRedirect(reverse('index'))
 
                 else:
-                    return HttpResponse("Your account was inactive.")
+                    return render(request, 'chimera_core/login.html', {'inactive': True, 'tempname':  captname})
 
             else:
                 print("Someone tried to login and failed.")
                 print("They used username: {} and password: {}".format(
                     username, password))
-                return HttpResponse("Invalid login details given")
+                return render(request, 'chimera_core/login.html', {'loginerr': True, 'tempname':  captname})
         
         else:
-            return render(request,'form.html', {'tempname':  captname})
+            return render(request, 'chimera_core/login.html', {'ccerr': True, 'tempname':  captname})
 
     else:
         return render(request, 'chimera_core/login.html', {'tempname':  captname})

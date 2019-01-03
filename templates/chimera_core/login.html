@@ -3,35 +3,46 @@
 {% block body_block %}
 <div class="container">
   <div class="jumbotron">
-    <h1>Login here :</h1>
-    <form method="post" action="{% url 'chimera_core:user_login' %}">
-      {% csrf_token %}
-      <table>
-        <tr>
-          <th>
-            <h4 for="username">Username:</h4>
-          </th>
-          <td><input type="text" name="username"></td>
-        </tr>
-        <tr>
-          <th>
-            {% with 'chimera_core/captcha_images/'|add:request.tempname|add:'.png' as capt_static %}
-              <img src="{% static capt_static %}" /><br />
-            {% endwith %}
-          </th>
-          <td>
-            <input type="text" size="20" name="imgtext"><br />
-          </td>
-        </tr>
-        <tr>
-          <th>
-            <h4 for="password">Password:</h4>
-          </th>
-          <td><input type="password" name="password"></td>
-        </tr>
-      </table>
-      <input type="submit" name="" value="Login" class="actiontable">
-    </form>
+    {% if inactive %}
+      <h3>Your account is inactive.</h3>
+
+    {% elif loginerr %}
+      <h3>Incorrect username or password. Please try again.</h3>
+
+    {% elif ccerr %}
+      <h3>Incorrect Chimera Codes. Please try again.</h3>
+
+    {% else %}
+      <h1>Login here :</h1>
+      <form method="post" action="{% url 'chimera_core:user_login' %}">
+        {% csrf_token %}
+        <table>
+          <tr>
+            <th>
+              <h4 for="username">Username:</h4>
+            </th>
+            <td><input type="text" name="username"></td>
+          </tr>
+          <tr>
+            <th>
+              {% with 'chimera_core/captcha_images/'|add:tempname as capt_static %}
+                <img src="{% static capt_static %}" /><br />
+              {% endwith %}
+            </th>
+            <td>
+              <input type="text" size="20" name="imgtext"><br />
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <h4 for="password">Password:</h4>
+            </th>
+            <td><input type="password" name="password"></td>
+          </tr>
+        </table>
+        <input type="submit" name="" value="Login" class="actiontable">
+      </form>
+      {% endif %}
   </div>
 </div>
 {% endblock %}
