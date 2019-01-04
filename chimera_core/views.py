@@ -1,10 +1,10 @@
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render
 from chimera_core.forms import UserRegForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from chimera_core.core import Chimera
+from chimera_core.backend import ChimeraAuthBackend
 
 
 def index(request):
@@ -41,7 +41,7 @@ def register(request):
 
 
 def user_login(request):
-    chimera = Chimera()
+    chimera = ChimeraAuthBackend()
     capt_text = chimera.create_random_captcha_text(4)
     captname = chimera.create_image_captcha(request, 1, capt_text)
     hashed_text = chimera.create_hash(capt_text)
