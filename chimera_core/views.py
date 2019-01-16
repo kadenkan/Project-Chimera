@@ -41,13 +41,10 @@ def register(request):
 
 
 def user_login(request):
-    chimera = ChimeraAuthBackend()
-    capt_text = chimera.create_random_captcha_text(4)
-    captname = chimera.create_image_captcha(request, 1, capt_text)
-    hashed_text = chimera.create_hash(capt_text)
-    print(captname)
 
     if request.method == 'POST':
+        chimera = ChimeraAuthBackend()
+        hashed_text = request.POST.get('capt_text')
 
         if hashed_text == chimera.create_hash(request.POST.get('imgtext')):
             username = request.POST.get('username')
@@ -61,16 +58,33 @@ def user_login(request):
                     return HttpResponseRedirect(reverse('index'))
 
                 else:
-                    return render(request, 'chimera_core/login.html', {'inactive': True, 'tempname':  captname})
+                    return render(request, 'chimera_core/login.html', {'inactive': True})
 
             else:
                 print("Someone tried to login and failed.")
                 print("They used username: {} and password: {}".format(
                     username, password))
-                return render(request, 'chimera_core/login.html', {'loginerr': True, 'tempname':  captname})
+                return render(request, 'chimera_core/login.html', {'loginerr': True})
         
         else:
-            return render(request, 'chimera_core/login.html', {'ccerr': True, 'tempname':  captname})
+            return render(request, 'chimera_core/login.html', {'ccerr': True})
 
     else:
-        return render(request, 'chimera_core/login.html', {'tempname':  captname})
+        return render(request, 'chimera_core/login.html')
+
+def login_form(request):
+    if request.method == 'POST':
+        chimera = ChimeraAuthBackend()
+        capt_text = chimera.create_random_captcha_text(4)
+        captname = chimera.create_image_captcha(request, 1, capt_text)
+        hashed_text = chimera.create_hash(capt_text)
+        print(captname)
+        return render(request, 'chimera_core/login.html', {'tempname':  captname, 'text': hashed_text})
+
+    else:
+        chimera = ChimeraAuthBackend()
+        capt_text = chimera.create_random_captcha_text(4)
+        captname = chimera.create_image_captcha(request, 1, capt_text)
+        hashed_text = chimera.create_hash(capt_text)
+        print(capt_text)
+        return render(request, 'chimera_core/login.html', {'tempname':  captname, 'text': hashed_text})
