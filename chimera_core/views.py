@@ -48,9 +48,8 @@ def user_login(request):
     print(captname)
 
     if request.method == 'POST':
-        data = request.POST.copy()
 
-        if hashed_text == chimera.create_hash(data['imgtext']):
+        if hashed_text == chimera.create_hash(request.POST.get('imgtext')):
             username = request.POST.get('username')
             password = request.POST.get('password')
             user = authenticate(username=username, password=password)

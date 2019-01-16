@@ -3,7 +3,7 @@ from hashlib import sha256
 from django.contrib.auth.hashers import check_password
 import random
 import chimera.settings as settings
-from django.contrib.auth.models import User
+from chimera_core.models import User
 
 # The number list, lower case character list and upper case character list are used to generate captcha text.
 NUMBER_LIST = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
@@ -20,9 +20,9 @@ ALPHABET_UPPERCASE = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
 
 class ChimeraAuthBackend:
 
-    def __init__(self, request):
-        self.chimera_code = {}
-        self.tempname_list = self.generate_chimera_codes(request)
+    # def __init__(self, request):
+    #     self.chimera_code = {}
+    #     self.tempname_list = self.generate_chimera_codes(request)
 
     # This function will create a random captcha string text based on above three list.
     # The input parameter is the captcha text length.
@@ -69,19 +69,19 @@ class ChimeraAuthBackend:
 
     def generate_chimera_codes(self, request):
 
-        self.chimera_code.clear()
+        # self.chimera_code.clear()
 
         temp_name_list = []
 
         order = random.sample(range(7), 3)
 
-        for i in range(3):
+        for i in range(1):
 
             text_length = range(random.randint(2, 4))
 
             text = self.create_random_captcha_text(text_length)
 
-            self.chimera_code[(order[i], text_length)] = self.create_hash(text)
+            # self.chimera_code[(order[i], text_length)] = self.create_hash(text)
 
             temp_name_list.append(self.create_image_captcha(request, i, text))
 
