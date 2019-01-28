@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from chimera_core.backend import ChimeraAuthBackend
+from chimera_core.models import Chimera
 
 
 def index(request):
@@ -43,10 +43,12 @@ def register(request):
 def user_login(request):
 
     if request.method == 'POST':
-        chimera = ChimeraAuthBackend()
-        hashed_text = request.POST.get('capt_text')
+        chimera = Chimera.objects.get(id=request.session['chimera'])
+        inputtext = request.POST.get('imgtext')
+        for key in chimera.chimera_code:
+            hashed_text += key
 
-        if hashed_text == chimera.create_hash(request.POST.get('imgtext')):
+        if hashed_text == chimera.create_hash():
             username = request.POST.get('username')
             password = request.POST.get('password')
             user = authenticate(username=username, password=password)
@@ -72,19 +74,11 @@ def user_login(request):
     else:
         return render(request, 'chimera_core/login.html')
 
-def login_form(request):
-    if request.method == 'POST':
-        chimera = ChimeraAuthBackend()
-        capt_text = chimera.create_random_captcha_text(4)
-        captname = chimera.create_image_captcha(request, 1, capt_text)
-        hashed_text = chimera.create_hash(capt_text)
-        print(captname)
-        return render(request, 'chimera_core/login.html', {'tempname':  captname, 'text': hashed_text})
 
-    else:
-        chimera = ChimeraAuthBackend()
-        capt_text = chimera.create_random_captcha_text(4)
-        captname = chimera.create_image_captcha(request, 1, capt_text)
-        hashed_text = chimera.create_hash(capt_text)
-        print(capt_text)
-        return render(request, 'chimera_core/login.html', {'tempname':  captname, 'text': hashed_text})
+def login_form(request):
+    chimera = Chimera()
+    chimera.generate_chimera_codes(request)
+    chimera.save()
+    captnames = chimera.tempname_list
+    request.session['chimera'] = chimera.id
+    return render(request, 'chimera_core/login.html', {'tempnames':  captnames})

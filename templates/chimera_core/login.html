@@ -24,11 +24,14 @@
             <td><input type="text" name="username"></td>
           </tr>
           <tr>
+            {% for i in tempnames %}
             <th>
-              {% with 'chimera_core/captcha_images/'|add:tempname as capt_static %}
+              {% with 'chimera_core/captcha_images/'|add:i.1 as capt_static %}
                 <img src="{% static capt_static %}" /><br />
               {% endwith %}
+            {{i.0}}
             </th>
+            {% endfor %}
             <td>
               <input type="text" size="20" name="imgtext"><br />
             </td>
@@ -40,7 +43,7 @@
             <td><input type="password" name="password"></td>
           </tr>
         </table>
-        <input type="hidden" name="capt_text" value= "{{text}}">
+
         <input type="submit" name="" value="Login" class="actiontable">
       </form>
       {% endif %}
