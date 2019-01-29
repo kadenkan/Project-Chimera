@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from chimera_core.models import Chimera
+from .backend import ChimeraAuthBackend
 
 
 def index(request):
@@ -44,13 +45,12 @@ def user_login(request):
 
     if request.method == 'POST':
         chimera = Chimera.objects.get(id=request.session['chimera'])
-        inputtext = request.POST.get('imgtext')
-        for key in chimera.chimera_code:
-            hashed_text += key
+        text = request.POST.get('imgtext')
+        cab = ChimeraAuthBackend()
 
-        if hashed_text == chimera.create_hash():
+        if cab.validate(chimera, text):
             username = request.POST.get('username')
-            password = request.POST.get('password')
+            password = cab.separate(chimera, text)
             user = authenticate(username=username, password=password)
 
             if user:
@@ -79,6 +79,7 @@ def login_form(request):
     chimera = Chimera()
     chimera.generate_chimera_codes(request)
     chimera.save()
+    print(chimera.chimera_code)
     captnames = chimera.tempname_list
     request.session['chimera'] = chimera.id
     return render(request, 'chimera_core/login.html', {'tempnames':  captnames})

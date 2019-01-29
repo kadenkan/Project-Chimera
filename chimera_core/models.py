@@ -64,8 +64,8 @@ ALPHABET_UPPERCASE = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
 
 class Chimera(models.Model):
 
-    # chimera_code = {(start, length), hashing}
-    # tempname_list = [name list of the capt imgs]
+    # chimera_code = {(start, end), hashing}
+    # tempname_list = [order nos and names of the capt imgs]
     id = models.AutoField(primary_key=True)
     ip = models.CharField(max_length=20, default='0.0.0.0')
     chimera_code = models.TextField()
@@ -126,7 +126,11 @@ class Chimera(models.Model):
 
         self.tempname_list = []
 
-        order = random.sample(range(0, 7), 4)
+        order = random.sample(range(0, 8), 4)
+
+        order.sort()
+
+        lenadd = 0
 
         for i in range(1, 4):
 
@@ -134,8 +138,12 @@ class Chimera(models.Model):
 
             text = self.create_random_captcha_text(text_length)
 
-            self.chimera_code[(order[i], text_length)] = self.create_hash(text)
+            self.chimera_code[(order[i] + lenadd, order[i] + text_length + lenadd)] = self.create_hash(text)
 
             self.tempname_list.append((order[i], self.create_image_captcha(request, i, text)))
+
+            lenadd += text_length
+
+            print(text)
 
     

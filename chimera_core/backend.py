@@ -1,9 +1,7 @@
-import random
-from hashlib import sha256
-from captcha.image import ImageCaptcha
 from django.contrib.auth.hashers import check_password
 import chimera.settings as settings
-from chimera_core.models import User
+from chimera_core.models import User, Chimera
+import ast
 
 # The number list, lower case character list and upper case character list are used to generate captcha text.
 NUMBER_LIST = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
@@ -41,4 +39,40 @@ class ChimeraAuthBackend:
     #         return User.objects.get(pk=username)
     #     except User.DoesNotExist:
     #         return None
-    pass
+
+    def validate(self, chimera, chimerapw):
+
+        valid = 0
+
+        chimera_code = ast.literal_eval(chimera.chimera_code)
+
+        for key, value in chimera_code.items():
+
+            attempt = chimerapw[key[0]:key[1]]
+
+            atthash = chimera.create_hash(attempt)
+
+            if atthash == value:
+
+                valid += 1
+
+        if valid == 3:
+
+            return True
+
+
+    def separate(self, chimera, chimerapw):
+
+        templs = list(chimerapw)
+
+        chimera_code = ast.literal_eval(chimera.chimera_code)
+
+        positions = sorted(list(chimera_code), key=lambda tup: tup[0])
+
+        for i in positions[::-1]:
+
+            del templs[slice(*i)]
+
+        password = ''.join(templs)
+
+        return password
