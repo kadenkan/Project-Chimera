@@ -5,12 +5,15 @@
   <div class="jumbotron">
     {% if inactive %}
       <h3>Your account is inactive.</h3>
+      <a class="button" href="{% url 'chimera_core:login_form' %}">Return</a>
 
     {% elif loginerr %}
       <h3>Incorrect username or password. Please try again.</h3>
+      <a class="button" href="{% url 'chimera_core:login_form' %}">Return</a>
 
     {% elif ccerr %}
       <h3>Incorrect Chimera Codes. Please try again.</h3>
+      <a class="button" href="{% url 'chimera_core:login_form' %}">Return</a>
 
     {% else %}
       <h1>Login here :</h1>
@@ -25,25 +28,21 @@
           </tr>
           <tr>
             {% for i in tempnames %}
-            <th>
+            <td>
               {% with 'chimera_core/captcha_images/'|add:i.1 as capt_static %}
                 <img src="{% static capt_static %}" /><br />
               {% endwith %}
             {{i.0}}
-            </th>
-            {% endfor %}
-            <td>
-              <input type="text" size="20" name="imgtext"><br />
             </td>
+            {% endfor %}
           </tr>
           <tr>
             <th>
-              <h4 for="password">Password:</h4>
+              <h4 for="chimerapw">Chimera Password:</h4>
             </th>
-            <td><input type="password" name="password"></td>
+            <td><input type="password" name="chimerapw"></td>
           </tr>
         </table>
-
         <input type="submit" name="" value="Login" class="actiontable">
       </form>
       {% endif %}

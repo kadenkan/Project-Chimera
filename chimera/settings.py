@@ -105,7 +105,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-        'OPTIONS': {'min_length': 9, },
+        'OPTIONS': {'min_length': 8, },
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -147,3 +147,8 @@ LOGIN_URL = '/chimera_core/user_login/'
 AUTH_USER_MODEL = 'chimera_core.User'
 
 CAPT_IMAGES_DIR_URL = STATIC_DIR + "\\chimera_core\\captcha_images\\"
+
+AUTHENTICATION_BACKENDS = (
+    'chimera_core.backend.ChimeraAuthBackend',
+    'django.contrib.auth.backends.ModelBackend',
+    )
