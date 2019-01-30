@@ -5,48 +5,51 @@
   <div class="jumbotron">
     {% if inactive %}
     <h3>Your account is inactive.</h3>
-    <a class="button" href="{% url 'chimera_core:login_form' %}">Return</a>
+    <a class="btn btn-default" href="{% url 'chimera_core:login_form' %}">Return</a>
 
     {% elif loginerr %}
     <h3>Incorrect username or password. Please try again.</h3>
-    <a class="button" href="{% url 'chimera_core:login_form' %}">Return</a>
+    <a class="btn btn-default" href="{% url 'chimera_core:login_form' %}">Return</a>
 
     {% elif ccerr %}
     <h3>Incorrect Chimera Codes. Please try again.</h3>
-    <a class="button" href="{% url 'chimera_core:login_form' %}">Return</a>
+    <a class="btn btn-default" href="{% url 'chimera_core:login_form' %}">Return</a>
 
     {% else %}
     <h1>Login here :</h1>
     <form method="post" action="{% url 'chimera_core:user_login' %}">
       {% csrf_token %}
-      <table>
-        <tr>
-          <th>
-            <h4 for="username">Username:</h4>
-          </th>
-          <td><input type="text" name="username"></td>
-        </tr>
-        <tr>
-          <th>
-            <h4 for="instruction" style="word-wrap: break-word;max-width: 150px;">Please add the Chimera Codes to your password according to their assigned positions.</h4>
-          </th>
-          {% for i in tempnames %}
-          <td>
-            {% with 'chimera_core/ccode_images/'|add:i.1 as cc_static %}
-            <img src="{% static cc_static %}"  /><br />
-            {% endwith %}
-            {{i.0}}
-          </td>
-          {% endfor %}
-        </tr>
-        <tr>
-          <th>
-            <h4 for="chimerapw">Chimera Password:</h4>
-          </th>
-          <td><input type="password" name="chimerapw"></td>
-        </tr>
-      </table>
-      <input type="submit" name="" value="Login" class="actiontable">
+      <div class="table-responsive">
+        <table class="table">
+          <tr class="form-group">
+            <th>
+              <h4 for="username">Username:</h4>
+            </th>
+            <td><input type="text" name="username" class="form-control"></td>
+          </tr>
+          <tr class="form-group">
+            <th>
+              <h4 for="instruction" style="word-wrap: break-word;max-width: 150px;">Please add the Chimera Codes to
+                your password according to their assigned positions.</h4>
+            </th>
+            {% for i in tempnames %}
+            <td>
+              {% with 'chimera_core/ccode_images/'|add:i.1 as cc_static %}
+              <img src="{% static cc_static %}" /><br />
+              {% endwith %}
+              {{i.0}}
+            </td>
+            {% endfor %}
+          </tr>
+          <tr class="form-group">
+            <th>
+              <h4 for="chimerapw">Chimera Password:</h4>
+            </th>
+            <td><input type="password" name="chimerapw" class="form-control"></td>
+          </tr>
+        </table>
+      </div>
+      <input type="submit" class="btn btn-default" value="Login" class="actiontable">
     </form>
     {% endif %}
   </div>
