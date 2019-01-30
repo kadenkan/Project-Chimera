@@ -4,9 +4,11 @@ from django.contrib.auth.models import PermissionsMixin
 import chimera.settings as settings
 import random
 from hashlib import sha256
-from captcha.image import ImageCaptcha
+from PIL import Image, ImageDraw, ImageFont
+
 
 # Create your models here.
+
 
 class UserManager(BaseUserManager):
 
@@ -44,7 +46,7 @@ class UserManager(BaseUserManager):
         return superUser
 
 
-class User(AbstractBaseUser,PermissionsMixin):
+class User(AbstractBaseUser, PermissionsMixin):
 
     userId = models.AutoField(primary_key=True)
 
@@ -60,24 +62,25 @@ class User(AbstractBaseUser,PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'userName'
-    
+
     REQUIRED_FIELDS = ['email']
 
     def __str__(self):
         return self.userName
 
 
-# The number list, lower case character list and upper case character list are used to generate captcha text.
+# The number list, lower case character list and upper case character list are used to generate ccode text.
 NUMBER_LIST = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
 ALPHABET_LOWERCASE = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
-                    'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+                      'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
 ALPHABET_UPPERCASE = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
-                    'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+                      'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
 # PUNCTUATION = ['!', '@', '#', '$', '%', '^', '&',
 #                '*', '(', ')', '-', '_', '+', '=', ',', '.', ':']
+
 
 class Chimera(models.Model):
 
@@ -95,10 +98,10 @@ class Chimera(models.Model):
 
         return self.ip
 
-    # This function will create a random captcha string text based on above three list.
-    # The input parameter is the captcha text length.
+    # This function will create a random ccode string text based on above three list.
+    # The input parameter is the ccode text length.
 
-    def create_random_captcha_text(self, text_length):
+    def create_random_ccode_text(self, text_length):
 
         base_char = ALPHABET_LOWERCASE + ALPHABET_UPPERCASE + NUMBER_LIST
 
@@ -109,32 +112,36 @@ class Chimera(models.Model):
 
         return imgtext
 
-    def create_hash(self, captcha_text):
+    def create_hash(self, ccode_text):
 
         salt = settings.SECRET_KEY[:20]
         # create hash
-        imghash = sha256((salt+captcha_text).encode('utf-8')).hexdigest()
+        imghash = sha256((salt+ccode_text).encode('utf-8')).hexdigest()
 
         return imghash
 
-    # Create an image captcha with special text.
+    # Create an image ccode with special text.
 
-    def create_image_captcha(self, request, num, captcha_text):
+    def create_image_ccode(self, request, num, ccode_text):
 
-        image_captcha = ImageCaptcha()
-        # Create the captcha image.
-        image = image_captcha.generate_image(captcha_text)
+        W, H = (150, 70)
 
-        # Add noise curve for the image.
-        image_captcha.create_noise_curve(image, image.getcolors())
+        image = Image.new("RGB", (W, H), (248, 152, 7))
 
-        # Add noise dots for the image.
-        image_captcha.create_noise_dots(image, image.getcolors())
+        draw = ImageDraw.Draw(image)
+
+        font = ImageFont.truetype(settings.STATIC_DIR + "/chimera_core/font/Calibri.ttf", 40)
+
+        w, h = draw.textsize(ccode_text, font=font)
+
+        draw.text(((W-w)/2,(H-h)/2), ccode_text, font=font, fill=(255, 255, 255))
 
         # Save the image to a png file.
-        temp = settings.CAPT_IMAGES_DIR_URL + \
+        temp = settings.CC_IMAGES_DIR_URL + \
             request.META['REMOTE_ADDR'] + "_" + str(num) + '.png'
+
         image.save(temp, "PNG")
+
         tempname = request.META['REMOTE_ADDR'] + "_" + str(num) + '.png'
 
         self.ip = request.META['REMOTE_ADDR']
@@ -157,14 +164,12 @@ class Chimera(models.Model):
 
             text_length = random.randint(2, 4)
 
-            text = self.create_random_captcha_text(text_length)
+            text = self.create_random_ccode_text(text_length)
 
-            self.chimera_code[(order[i] + lenadd, order[i] + text_length + lenadd)] = self.create_hash(text)
+            self.chimera_code[(order[i] + lenadd, order[i] +
+                               text_length + lenadd)] = self.create_hash(text)
 
-            self.tempname_list.append((order[i], self.create_image_captcha(request, i, text)))
+            self.tempname_list.append(
+                (order[i], self.create_image_ccode(request, i, text)))
 
             lenadd += text_length
-
-            print(text)
-
-    

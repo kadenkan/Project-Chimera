@@ -67,12 +67,13 @@ def user_login(request):
         cab = ChimeraAuthBackend()
 
         username = request.POST.get('username')
-            
+
         chimerapw = request.POST.get('chimerapw')
 
         if cab.validate(chimera, chimerapw):
 
-            user = authenticate(chimera=chimera, username=username, chimerapw=chimerapw)
+            user = authenticate(
+                chimera=chimera, username=username, chimerapw=chimerapw)
 
             if user:
 
@@ -94,7 +95,7 @@ def user_login(request):
                     username, chimerapw))
 
                 return render(request, 'chimera_core/login.html', {'loginerr': True})
-        
+
         else:
 
             return render(request, 'chimera_core/login.html', {'ccerr': True})
@@ -112,8 +113,8 @@ def login_form(request):
 
     chimera.save()
 
-    captnames = chimera.tempname_list
+    ccnames = chimera.tempname_list
 
     request.session['chimera'] = chimera.id
 
-    return render(request, 'chimera_core/login.html', {'tempnames':  captnames})
+    return render(request, 'chimera_core/login.html', {'tempnames':  ccnames})

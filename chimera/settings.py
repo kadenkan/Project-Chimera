@@ -34,7 +34,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'captcha',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -146,7 +145,7 @@ LOGIN_URL = '/chimera_core/user_login/'
 
 AUTH_USER_MODEL = 'chimera_core.User'
 
-CAPT_IMAGES_DIR_URL = STATIC_DIR + "\\chimera_core\\captcha_images\\"
+CC_IMAGES_DIR_URL = STATIC_DIR + "\\chimera_core\\ccode_images\\"
 
 AUTHENTICATION_BACKENDS = (
     'chimera_core.backend.ChimeraAuthBackend',

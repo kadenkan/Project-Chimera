@@ -1,15 +1,16 @@
 from django.contrib.auth.hashers import check_password
 import chimera.settings as settings
-from chimera_core.models import User, Chimera
+from chimera_core.models import User
 import ast
 from hashlib import sha256
+
 
 class ChimeraAuthBackend:
 
     def authenticate(self, request, chimera=None, username=None, chimerapw=None):
 
         chimera_code = ast.literal_eval(chimera.chimera_code)
-        
+
         user = User.objects.get(userName=username)
 
         password = self.separate(chimera_code, chimerapw)
@@ -17,7 +18,6 @@ class ChimeraAuthBackend:
         if check_password(password, user.password):
 
             return user
-    
 
     def get_user(self, username):
 
@@ -50,7 +50,6 @@ class ChimeraAuthBackend:
         if valid == 3:
 
             return True
-
 
     def separate(self, chimera_code, chimerapw):
 
