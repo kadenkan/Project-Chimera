@@ -78,14 +78,14 @@ ALPHABET_LOWERCASE = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
 ALPHABET_UPPERCASE = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
                       'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
-# PUNCTUATION = ['!', '@', '#', '$', '%', '^', '&',
-#                '*', '(', ')', '-', '_', '+', '=', ',', '.', ':']
+SYMBOLS = ['!', '@', '#', '$', '%', '^', '&',
+                '*', '(', ')', '-', '_', '+', '=', ',', '.', ':']
 
 
 class Chimera(models.Model):
 
     # chimera_code = {(start, end), hashing}
-    # tempname_list = [order nos and names of the capt imgs]
+    # tempname_list = [order num, name of the capt imgs]
     id = models.AutoField(primary_key=True)
 
     ip = models.CharField(max_length=20, default='0.0.0.0')
@@ -103,7 +103,7 @@ class Chimera(models.Model):
 
     def create_random_ccode_text(self, text_length):
 
-        base_char = ALPHABET_LOWERCASE + ALPHABET_UPPERCASE + NUMBER_LIST
+        base_char = ALPHABET_LOWERCASE + ALPHABET_UPPERCASE + NUMBER_LIST + SYMBOLS
 
         # create a 5 char random strin and sha hash it, note that there is no big i
         imgtext = ''.join([random.choice(base_char)
@@ -160,9 +160,9 @@ class Chimera(models.Model):
 
         lenadd = 0
 
-        for i in range(1, 4):
+        for i in range(3):
 
-            text_length = random.randint(2, 4)
+            text_length = random.randint(1, 3)
 
             text = self.create_random_ccode_text(text_length)
 

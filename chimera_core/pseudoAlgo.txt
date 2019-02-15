@@ -1,0 +1,64 @@
+Algorithm 1: Algorithm for Chimera Codes creation
+
+BEGIN
+    chimera_code ← empty
+    tempname_list ← enpty
+    request ← HTML request
+    order ← randomly generate 3 integers in ascending order
+    lenadd ← 0
+
+        for i in range 3
+            text_length ← random integers from 1 to 4
+            text ← randomly chosen
+            // set the key-value pair
+            chimera_code[(order[i] + lenadd, order[i] + text_length + lenadd)] 
+                ← create_hash(text) 
+            // set the array
+            tempname_list append(
+                (order[i], create_image_ccode(request, i, text)))
+            lenadd ← lenadd + text_length
+        end for
+END
+
+
+Algorithm 2: Algorithm for Chimera Codes validation
+
+BEGIN
+    valid ← 0
+    username ← username entered
+    chimera_code ← dictionary from Chimera object
+
+        for key, value in chimera_code do
+            attempt ← chimerapw[key[0]:key[1]]
+            attempt_hash ← hashing with salt
+
+            if attempt_hash == value
+                valid + 1
+            end if
+        end for
+
+        if valid == 3
+            return true
+        endif
+END
+
+
+Algorithm 3: Algorithm for user authentication
+
+BEGIN
+    chimera_code ← dictionary from Chimera object
+    username ← user input
+    chimerapw ← user input
+
+        for i in key of chimera_code
+            delete chimera_code by key in chimerapw
+        end for
+
+    password ← join rest of the chimerapw
+    user ← object retrieved from database by username
+
+    if check_password(password from the above, password from database)
+        return user
+    end if
+END
+
