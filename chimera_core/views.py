@@ -1,9 +1,14 @@
+import json
+import urllib
+import time
+from django.conf import settings
 from django.shortcuts import render
 from chimera_core.forms import UserRegForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from chimera_core.models import Chimera
 from .backend import ChimeraAuthBackend
 
@@ -37,13 +42,29 @@ def register(request):
 
         if regform.is_valid():
 
-            user = regform.save()
+            recaptcha_response = request.POST.get('g-recaptcha-response')
+            url = 'https://www.google.com/recaptcha/api/siteverify'
+            values = {
+                'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+                'response': recaptcha_response
+            }
+            data = urllib.parse.urlencode(values).encode()
+            req =  urllib.request.Request(url, data=data)
+            response = urllib.request.urlopen(req)
+            result = json.loads(response.read().decode())
 
-            user.set_password(user.password)
 
-            user.save()
+            if result['success']:
+                user = regform.save()
 
-            registered = True
+                user.set_password(user.password)
+
+                user.save()
+
+                registered = True
+
+            else:
+                messages.error(request, 'Invalid reCAPTCHA. Please try again.')
 
         else:
 
@@ -81,6 +102,14 @@ def user_login(request):
 
                     login(request, user)
 
+                    elapsed_time = time.time() - request.session['start_time']
+
+                    print(elapsed_time)
+
+                    setattr(user, 'login_dur', elapsed_time)
+
+                    user.save()
+
                     return HttpResponseRedirect(reverse('index'))
 
                 else:
@@ -116,5 +145,7 @@ def login_form(request):
     ccnames = chimera.tempname_list
 
     request.session['chimera'] = chimera.id
+
+    request.session['start_time'] = time.time()
 
     return render(request, 'chimera_core/login.html', {'tempnames':  ccnames})

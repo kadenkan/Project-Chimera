@@ -15,6 +15,8 @@
         <form enctype="multipart/form-data" method="POST">
           {% csrf_token %}
           {{ form.as_p }}
+          <script src='https://www.google.com/recaptcha/api.js'></script>
+          <div class="g-recaptcha" data-sitekey="6Lf-sJMUAAAAALp5VrQxZOk8tvafezR44TgIShO_"></div>
           <input type="submit" name="" value="Register">
         </form>       
       {% endif %}

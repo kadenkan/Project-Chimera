@@ -148,3 +148,5 @@ AUTHENTICATION_BACKENDS = (
     'chimera_core.backend.ChimeraAuthBackend',
     'django.contrib.auth.backends.ModelBackend',
     )
+
+GOOGLE_RECAPTCHA_SECRET_KEY = '6Lf-sJMUAAAAACth-1VXC5kAxKWU5JoQMso6Cgms'

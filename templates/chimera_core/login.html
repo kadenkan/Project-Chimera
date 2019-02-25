@@ -49,6 +49,10 @@
           </tr>
         </table>
       </div>
+      {% if capt_inclu %}
+        <script src='https://www.google.com/recaptcha/api.js'></script>
+        <div class="g-recaptcha" data-sitekey="6Lf-sJMUAAAAALp5VrQxZOk8tvafezR44TgIShO_"></div>
+      {% endif %}
       <input type="submit" class="btn btn-default" value="Login" class="actiontable">
     </form>
     {% endif %}

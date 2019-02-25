@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
@@ -58,6 +59,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_admin = models.BooleanField(default=False)
 
     is_staff = models.BooleanField(default=False)
+
+    login_dur = models.FloatField(default=0.0)
 
     objects = UserManager()
 
@@ -130,7 +133,7 @@ class Chimera(models.Model):
 
         draw = ImageDraw.Draw(image)
 
-        font = ImageFont.truetype(settings.STATIC_DIR + "/chimera_core/font/Calibri.ttf", 40)
+        font = ImageFont.truetype(settings.STATIC_DIR + "/chimera_core/font/Verdana Pro W01 Light.ttf", 40)
 
         w, h = draw.textsize(ccode_text, font=font)
 
