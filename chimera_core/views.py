@@ -42,29 +42,15 @@ def register(request):
 
         if regform.is_valid():
 
-            recaptcha_response = request.POST.get('g-recaptcha-response')
-            url = 'https://www.google.com/recaptcha/api/siteverify'
-            values = {
-                'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
-                'response': recaptcha_response
-            }
-            data = urllib.parse.urlencode(values).encode()
-            req =  urllib.request.Request(url, data=data)
-            response = urllib.request.urlopen(req)
-            result = json.loads(response.read().decode())
+            user = regform.save()
+
+            user.set_password(user.password)
+
+            user.save()
+
+            registered = True
 
 
-            if result['success']:
-                user = regform.save()
-
-                user.set_password(user.password)
-
-                user.save()
-
-                registered = True
-
-            else:
-                messages.error(request, 'Invalid reCAPTCHA. Please try again.')
 
         else:
 
