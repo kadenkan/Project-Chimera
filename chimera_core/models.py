@@ -59,8 +59,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     is_staff = models.BooleanField(default=False)
 
-    login_dur = models.FloatField(default=0.0)
-
     objects = UserManager()
 
     USERNAME_FIELD = 'userName'

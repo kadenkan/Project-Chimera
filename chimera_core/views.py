@@ -1,6 +1,3 @@
-import json
-import urllib
-import time
 from django.conf import settings
 from django.shortcuts import render
 from chimera_core.forms import UserRegForm
@@ -50,8 +47,6 @@ def register(request):
 
             registered = True
 
-
-
         else:
 
             print(regform.errors)
@@ -79,20 +74,17 @@ def user_login(request):
 
         if cab.validate(chimera, chimerapw):
 
-            user = authenticate(
-                chimera=chimera, username=username, chimerapw=chimerapw)
+            try:
+                user = authenticate(chimera=chimera, username=username, chimerapw=chimerapw)
+
+            except:
+                return render(request, 'chimera_core/login.html', {'loginerr': True})
 
             if user:
 
                 if user.is_active:
 
                     login(request, user)
-
-                    elapsed_time = time.time() - request.session['start_time']
-
-                    print(elapsed_time)
-
-                    setattr(user, 'login_dur', elapsed_time)
 
                     user.save()
 
@@ -131,7 +123,5 @@ def login_form(request):
     ccnames = chimera.tempname_list
 
     request.session['chimera'] = chimera.id
-
-    request.session['start_time'] = time.time()
 
     return render(request, 'chimera_core/login.html', {'tempnames':  ccnames})
