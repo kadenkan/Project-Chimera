@@ -25,3 +25,8 @@ Simply run `python manage.py runserver`, then click on the link provided or ente
 ### Operatioins
 You can register and login on the web page and gain the experience of using Chimera user authentication. Enjoy!
 
+## Running Tests
+To run attacks on Chimera, I suggest using Hashcat to do so.
+- Hashcat: https://hashcat.net/hashcat/
+
+Passwords are provided in attacks/demo.zip. You can generate other Chimera Passwords using password-convert.py.
