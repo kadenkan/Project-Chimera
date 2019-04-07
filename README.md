@@ -17,7 +17,7 @@ Downloads:
 Setting up Django:
 1. Run `mkvirtualenv Project-Chimera` in the commandline terminal **(make sure you are in the Project-Chimera directory)**.
 2. Run `pip install -r requirements.txt`, dependancies should be installed. 
-3. Run `python manage.py migrate`
+3. Run `python manage.py migrate`. Tables of Chimera should be created in your PostgeSQL database.
 
 ### Running the web
 Simply run `python manage.py runserver`, then click on the link provided or enter the link http://127.0.0.1:8000/ in your browser. It's done!
