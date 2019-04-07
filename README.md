@@ -22,7 +22,7 @@ Setting up Django:
 ### Running the web
 Simply run `python manage.py runserver`, then click on the link provided or enter the link http://127.0.0.1:8000/ in your browser. It's done!
 
-### Operatioins
+### Operations
 You can register and login on the web page and gain the experience of using Chimera user authentication. Enjoy!
 
 ## Running Tests
