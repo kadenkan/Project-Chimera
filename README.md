@@ -1,37 +1,32 @@
-## Welcome to GitHub Pages
+# Project-Chimera
+My final year project project, a novel hybrid user authentication scheme with multiple bases.
 
-You can use the [editor on GitHub](https://github.com/kadenkan/Project-Chimera/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+The codes here are for the webpage demo as a primitive implementation and display of Chimera.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+- By Kan Ka Ho 54403181
+- Project Code: 18CS110
 
-### Markdown
+## How to use the codes
+First, you have to set up the environment for Django, a web framework. Below are the links for downloading it and doing so.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+### Prequisites
+Downloads:
+- Python 3.7.3: https://www.python.org/downloads/
+- PostgreSQL 10: https://www.postgresql.org/download/
 
-```markdown
-Syntax highlighted code block
+Setting up Django:
+1. Run `mkvirtualenv Project-Chimera` in the commandline terminal **(make sure you are in the Project-Chimera directory)**.
+2. Run `pip install -r requirements.txt`, dependancies should be installed. 
+3. Run `python manage.py migrate`. Tables of Chimera should be created in your PostgeSQL database.
 
-# Header 1
-## Header 2
-### Header 3
+### Running the web
+Simply run `python manage.py runserver`, then click on the link provided or enter the link http://127.0.0.1:8000/ in your browser. It's done!
 
-- Bulleted
-- List
+### Operations
+You can register and login on the web page and gain the experience of using Chimera user authentication. Enjoy!
 
-1. Numbered
-2. List
+## Running Tests
+To run attacks on Chimera, I suggest using Hashcat to do so.
+- Hashcat: https://hashcat.net/hashcat/
 
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/kadenkan/Project-Chimera/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+Passwords are provided in attacks/demo.zip. You can generate other Chimera Passwords using password-convert.py.
